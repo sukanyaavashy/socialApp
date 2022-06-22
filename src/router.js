@@ -9,11 +9,11 @@ import HomeScreen from './homeStack/HomeScreen'
 
 const Stack = createNativeStackNavigator();
 
-const router = () => {
+const Router = () => {
   return (
     <NavigationContainer>
     <Stack.Navigator initialRouteName='LoginScreen'>
-      <Stack.Screen name="LoginScreen" component={LoginScreen} />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
 
@@ -23,6 +23,8 @@ const router = () => {
 }
 
 
-export default router
+export default Router
 
 const styles = StyleSheet.create({})
+
+

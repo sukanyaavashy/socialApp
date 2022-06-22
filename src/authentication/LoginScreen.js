@@ -6,17 +6,26 @@ import CheckCirle from 'react-native-vector-icons/MaterialIcons';
 import LongArrow from 'react-native-vector-icons/FontAwesome'
 import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../store/actions';
+import {useSelector,useDispatch,Provider} from "react-redux";
+// import { Provider } from "react-redux";
+
+// import {useSelector,useDispatch} from "react-redux";
+import {setEmail,setPassword,getUserUid} from "../redux/actions";
+import auth from '@react-native-firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 
 
-const LoginScreen = ({navigation}) => {
-    const state = useSelector(e=>e)
-    const dispatch = useDispatch();
+export default function LoginScreen({navigation}){
+    const storeData = useSelector((state)=>state)
+    const dispatch =useDispatch()
+    const {email,password,uid}=useSelector(state=>state.userReducer);
+
+
+    // const state = useSelector(e=>e)
+    // const dispatch = useDispatch();
 
     console.log(state,'sdsd')
     const [data, setData] = React.useState({
@@ -36,6 +45,7 @@ const LoginScreen = ({navigation}) => {
                 check_textInputChange: true,
                 isValidUser: true
             });
+            dispatch(setEmail(val));
         } else {
             setData({
                 ...data,
@@ -53,6 +63,7 @@ const LoginScreen = ({navigation}) => {
                 password: val,
                 isValidPassword: true
             });
+            dispatch(setPassword(val));
         } else {
             setData({
                 ...data,
@@ -112,6 +123,43 @@ const LoginScreen = ({navigation}) => {
     //     signIn(foundUser);
     // }
 
+
+
+
+
+    const loginHandle = (email, password) => {
+
+        if (email.length==0){
+          Alert.alert("Enter Email")
+        }else if(password.length==0){
+          Alert.alert("Enter Password")
+        }
+        else{
+          auth().signInWithEmailAndPassword(email, password).then(
+            function (result){
+              const value= result.user.uid;
+              dispatch(getUserUid(value));
+              console.log(uid);
+              console.log('..........',storeData.userReducer.email)
+            }
+
+          ).catch(
+            function(e){
+              if (e.code==="auth/user-not-found"){
+                return(Alert.alert("In correct email"))
+              }else if(e.code==="auth/wrong-password"){
+                return(Alert.alert("The password is invalid"))
+              }else if(e.code==="auth/invalid-email"){
+                return(Alert.alert("Enter valid email"))
+
+              }
+              else{
+                return(console.log(e.message),Alert.alert(e.mesage))
+              }
+
+            });
+        }
+
   return (
     <View style={styles.container}>
         <View style={styles.header}>
@@ -135,6 +183,7 @@ const LoginScreen = ({navigation}) => {
         placeholder="Your Email"
         placeholderTextColor="#666666"
         autoCapitalize="none"
+        // onChangeText={(value)=>dispatch(setPassword(value))}
         onChangeText={(val) => textInputChange(val)}
         onEndEditing={(e)=>handleValidUser(e.nativeEvent.text)}
         style={styles.inputField}/>
@@ -160,6 +209,7 @@ const LoginScreen = ({navigation}) => {
         placeholderTextColor="#666666"
         autoCapitalize="none"
         secureTextEntry={data.secureTextEntry ? true : false}
+        // onChangeText={(value)=>dispatch(setEmail(value))}
         onChangeText={(val) => handlePasswordChange(val)}
         style={styles.inputField}/>
           <TouchableOpacity onPress={updateSecureTextEntry}>
@@ -182,7 +232,7 @@ const LoginScreen = ({navigation}) => {
 
 
         <TouchableOpacity
-            // onPress={() => navigation.navigate('RegistrationScreen')}
+            onPress={() => navigation.navigate('RegistrationScreen')}
             >
             <View style={styles.register}>
                 <View style={styles.registerText}>
@@ -202,9 +252,9 @@ const LoginScreen = ({navigation}) => {
         <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    //  onPress={() => {loginHandle()}}
-                    // onPress={() => navigation.navigate('homeScreen')}
-                    onPress={()=>{navigation.navigate('RegistrationScreen')}}
+                      onPress={() => {loginHandle(email, password)}}
+
+
                 >
                 <LinearGradient
                     colors={['#08d4c4', '#01ab9d']}
@@ -216,18 +266,7 @@ const LoginScreen = ({navigation}) => {
                 </LinearGradient>
                 </TouchableOpacity>
 
-                {/* <TouchableOpacity
-                    // onPress={() => navigation.navigate('SignUpScreen')}
-                    style={[styles.signIn, {
-                        borderColor: '#009387',
-                        borderWidth: 1,
-                        marginTop: 15
-                    }]}
-                >
-                    <Text style={[styles.textSign, {
-                        color: '#009387'
-                    }]}>Sign Up</Text>
-                </TouchableOpacity> */}
+
             </View>
 
         </Animatable.View>
@@ -235,10 +274,9 @@ const LoginScreen = ({navigation}) => {
     </View>
   )
 }
+}
 
-export default LoginScreen
-
-const styles = StyleSheet.create({
+const styles=StyleSheet.create({
     container:{
         flex:1,
         backgroundColor: '#009387'
@@ -313,8 +351,7 @@ const styles = StyleSheet.create({
         padding: 10,
         color:"blue",
         marginTop: Platform.OS === 'ios' ? 0 : -12,
-        // color:"blue"
-        // margin:5
-    }
-
+        color:"blue",
+        margin:5
+    },
 })

@@ -6,10 +6,11 @@ import CheckCirle from 'react-native-vector-icons/MaterialIcons';
 import LongArrow from 'react-native-vector-icons/FontAwesome'
 import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
-import {useSelector,useDispatch,Provider} from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+// import {useSelector,useDispatch,Provider} from "react-redux";
 // import { Provider } from "react-redux";
 
-// import {useSelector,useDispatch} from "react-redux";
+import {useSelector,useDispatch} from "react-redux";
 import {setEmail,setPassword,getUserUid} from "../redux/actions";
 import auth from '@react-native-firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
@@ -18,109 +19,80 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 
-export default function LoginScreen({navigation}){
-    const storeData = useSelector((state)=>state)
+const LoginScreen = ({navigation}) => {
     const dispatch =useDispatch()
+    const storeData = useSelector((state)=>state)
     const {email,password,uid}=useSelector(state=>state.userReducer);
 
 
     // const state = useSelector(e=>e)
     // const dispatch = useDispatch();
 
-    console.log(state,'sdsd')
-    const [data, setData] = React.useState({
-        email: '',
-        password: '',
-        check_textInputChange: false,
-        secureTextEntry: true,
-        isValidUser: true,
-        isValidPassword: true,
-    });
+    // console.log(state,'sdsd')
+    // const [data, setData] = React.useState({
+    //     email: '',
+    //     password: '',
+    //     check_textInputChange: false,
+    //     secureTextEntry: true,
+    //     isValidUser: true,
+    //     isValidPassword: true,
+    // });
 
-    const textInputChange = (val) => {
-        if( val.trim().length >= 4 ) {
-            setData({
-                ...data,
-                email: val,
-                check_textInputChange: true,
-                isValidUser: true
-            });
-            dispatch(setEmail(val));
-        } else {
-            setData({
-                ...data,
-                email: val,
-                check_textInputChange: false,
-                isValidUser: false
-            });
-        }
-    }
-
-    const handlePasswordChange = (val) => {
-        if( val.trim().length >= 8 ) {
-            setData({
-                ...data,
-                password: val,
-                isValidPassword: true
-            });
-            dispatch(setPassword(val));
-        } else {
-            setData({
-                ...data,
-                password: val,
-                isValidPassword: false
-            });
-        }
-    }
-
-    const updateSecureTextEntry = () => {
-        setData({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
-        });
-    }
-
-    const handleValidUser = (val) => {
-        if( val.trim().length >= 4 ) {
-            setData({
-                ...data,
-                isValidUser: true
-            });
-        } else {
-            setData({
-                ...data,
-                isValidUser: false
-            });
-        }
-    }
-
-    //  const loginHandle = ()=>{
-    //    dispatch(login("hsgdsdcdh"))
-    //  }
-
-
-
-
-    // const loginHandle = (email, password) => {
-
-    //     const foundUser = Users.filter( item => {
-    //         return email == item.email && password == item.password;
-    //     } );
-
-    //     if ( data.email.length == 0 || data.password.length == 0 ) {
-    //         Alert.alert('Wrong Input!', 'email or password field cannot be empty.', [
-    //             {text: 'Okay'}
-    //         ]);
-    //         return;
+    // const textInputChange = (val) => {
+    //     if( val.trim().length >= 4 ) {
+    //         setData({
+    //             ...data,
+    //             email: val,
+    //             check_textInputChange: true,
+    //             isValidUser: true
+    //         });
+    //         dispatch(setEmail(val));
+    //     } else {
+    //         setData({
+    //             ...data,
+    //             email: val,
+    //             check_textInputChange: false,
+    //             isValidUser: false
+    //         });
     //     }
+    // }
 
-    //     if ( foundUser.length == 0 ) {
-    //         Alert.alert('Invalid User!', 'email or password is incorrect.', [
-    //             {text: 'Okay'}
-    //         ]);
-    //         return;
+    // const handlePasswordChange = (val) => {
+    //     if( val.trim().length >= 8 ) {
+    //         setData({
+    //             ...data,
+    //             password: val,
+    //             isValidPassword: true
+    //         });
+    //         dispatch(setPassword(val));
+    //     } else {
+    //         setData({
+    //             ...data,
+    //             password: val,
+    //             isValidPassword: false
+    //         });
     //     }
-    //     signIn(foundUser);
+    // }
+
+    // const updateSecureTextEntry = () => {
+    //     setData({
+    //         ...data,
+    //         secureTextEntry: !data.secureTextEntry
+    //     });
+    // }
+
+    // const handleValidUser = (val) => {
+    //     if( val.trim().length >= 4 ) {
+    //         setData({
+    //             ...data,
+    //             isValidUser: true
+    //         });
+    //     } else {
+    //         setData({
+    //             ...data,
+    //             isValidUser: false
+    //         });
+    //     }
     // }
 
 
@@ -139,8 +111,9 @@ export default function LoginScreen({navigation}){
             function (result){
               const value= result.user.uid;
               dispatch(getUserUid(value));
-              console.log(uid);
-              console.log('..........',storeData.userReducer.email)
+              console.log('.....',value);
+              AsyncStorage.setItem('token', value);
+              // console.log('..........',storeData.userReducer.uid)
             }
 
           ).catch(
@@ -158,7 +131,7 @@ export default function LoginScreen({navigation}){
               }
 
             });
-        }
+        }}
 
   return (
     <View style={styles.container}>
@@ -182,20 +155,21 @@ export default function LoginScreen({navigation}){
         <TextInput
         placeholder="Your Email"
         placeholderTextColor="#666666"
+        value={email}
         autoCapitalize="none"
-        // onChangeText={(value)=>dispatch(setPassword(value))}
-        onChangeText={(val) => textInputChange(val)}
-        onEndEditing={(e)=>handleValidUser(e.nativeEvent.text)}
+         onChangeText={(value)=>dispatch(setEmail(value))}
+        // onChangeText={(val) => textInputChange(val)}
+        // onEndEditing={(e)=>handleValidUser(e.nativeEvent.text)}
         style={styles.inputField}/>
 
 
-        {data.check_textInputChange ?
+        {/* {data.check_textInputChange ?
                 <Animatable.View
                     animation="bounceIn"
                 >
                    <CheckCirle name='check-circle' color="green"  size={20}/>
                 </Animatable.View>
-                : null}
+                : null} */}
         </View>
 
 
@@ -208,12 +182,14 @@ export default function LoginScreen({navigation}){
         placeholder="Your Password"
         placeholderTextColor="#666666"
         autoCapitalize="none"
-        secureTextEntry={data.secureTextEntry ? true : false}
-        // onChangeText={(value)=>dispatch(setEmail(value))}
-        onChangeText={(val) => handlePasswordChange(val)}
+        value={password}
+        secureTextEntry={true}
+        // secureTextEntry={data.secureTextEntry ? true : false}
+         onChangeText={(value)=>dispatch(setPassword(value))}
+        // onChangeText={(val) => handlePasswordChange(val)}
         style={styles.inputField}/>
-          <TouchableOpacity onPress={updateSecureTextEntry}>
-            {data.secureTextEntry ?
+          {/* <TouchableOpacity onPress={updateSecureTextEntry}> */}
+            {/* {data.secureTextEntry ?
               <Feather
                 name="eye-off"
                 color="grey"
@@ -225,8 +201,8 @@ export default function LoginScreen({navigation}){
                 color="grey"
                 size={20}
               />
-            }
-            </TouchableOpacity>
+            } */}
+            {/* </TouchableOpacity> */}
 
         </View>
 
@@ -272,9 +248,9 @@ export default function LoginScreen({navigation}){
         </Animatable.View>
 
     </View>
-  )
-}
-}
+  )}
+
+export default LoginScreen;
 
 const styles=StyleSheet.create({
     container:{

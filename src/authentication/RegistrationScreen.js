@@ -1,20 +1,3 @@
-// import { StyleSheet, Text, View } from 'react-native'
-// import React from 'react'
-
-// const RegistrationScreen = () => {
-//   return (
-//     <View>
-//       <Text>RegistrationScreen</Text>
-//     </View>
-//   )
-// }
-
-// export default RegistrationScreen
-
-// const styles = StyleSheet.create({})
-
-
-
 import LinearGradient from 'react-native-linear-gradient';
 import React,{useId, useState} from 'react';
 import { StyleSheet, View, Text,Dimensions,Image,TextInput,Pressable,Alert} from 'react-native';
@@ -22,27 +5,44 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import auth from '@react-native-firebase/auth';
 import {useSelector,useDispatch, Provider} from "react-redux";
 import {getUserUid} from "./Src/redux/actions";
+import LoginScreen from './LoginScreen';
 
 
-function RegistrationScreen(){
+function CreateUserScreen({navigation}){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [fname,SetFname]=useState("");
-    const [sname,SetSname]=useState("");
-    const [number,SetNumber]=useState("");
-    const [cp,SetCp]=useState("")
-    const uid=useSelector(state=>state.userReducer);
+    const [firstName, setFirstName]=useState("");
+    const [lastName, setLastName]=useState("");
+    const [number, setNumber]=useState("");
+    const [confirmPassword, setConfirmPassword]=useState("")
+
+    const uid = useSelector(state=>state.userReducer);
 
     const NewUser=async(email, password) =>{
-        if(password!==cp){
-            return Alert.alert("Passwords don't match.")
-        }
+      if(firstName.length==0){
+        Alert.alert('Enter user first Name')
+    }else if(lastName.length==0){
+        Alert.alert('Enter user last Name')
+    }
+    else if (email.length == 0) {
+      Alert.alert("Enter Email");
+    } else if (password.length == 0) {
+      Alert.alert("Enter Password");
+    }else if (confirmPassword.length == 0) {
+        Alert.alert("Enter confirmPassword");
+    }else if (number.length == 0) {
+        Alert.alert("Enter phoneNumber");
+    }
+    else if (password !== confirmPassword){
+        Alert.alert("Password doesn't match")
+    }
 
         else {
           try{
             await auth().createUserWithEmailAndPassword(email,password).then(
               function(res){
-                res.user.updateProfile({displayName:fname+" "+sname,phoneNumber:number})
+                res.user.updateProfile({displayName:firstName+" "+lastName,phoneNumber:number})
+                console.log(navigation.navigate('LoginScreen'))
               }
             )
         }
@@ -64,52 +64,62 @@ function RegistrationScreen(){
 
     return(
       <View style={styles.container}>
+
           <LinearGradient
-              colors={["#ffd89b", "#19547b"]}
+              colors={["#93fff4","pink"]}
               style={styles.linearGradient}
               >
-              <View style={{justifyContent:"center",alignItems:"center"}}>
+                <View style={styles.mainHeading}>
+                <Text style={styles.registerText}>
+                  Register
+                </Text>
+                <Text style={styles.registerCaption}>
+                  Enter Your Details to Register
+                  </Text>
+                </View>
 
-                  <View style={{marginTop:10,backgroundColor:"white",flexDirection:"row",width: 300,borderRadius: 6,borderWidth: 2,borderColor: '#ffffff',}}>
+              <View style={styles.inputFieldSection}>
+
+                  <View style={styles.action}>
                       < Icon style={{padding: 10}} name="person" size={30} color="black" />
                       <TextInput
-                      style={styles.input}
-                      value={fname}
-                      onChangeText={SetFname}
-                      placeholder="First name"
+                      style={styles.inputField}
+                      value={firstName}
+                      onChangeText={setFirstName}
+                      placeholder="First Name"
                       keyboardType='ascii-capable'
                       autoCompleteType='off'
                       />
                   </View>
 
-                  <View style={{marginTop:5,backgroundColor:"white",flexDirection:"row",width: 300,borderRadius: 6,borderWidth: 2,borderColor: '#ffffff',}}>
+                  <View style={styles.action}>
                       < Icon style={{padding: 10}} name="person" size={30} color="black" />
                       <TextInput
-                      style={styles.input}
-                      value={sname}
-                      onChangeText={SetSname}
-                      placeholder="Second name"
+                      style={styles.inputField}
+                      value={lastName}
+                      onChangeText={setLastName}
+                      placeholder="Last Name"
                       keyboardType='ascii-capable'
                       autoCompleteType='off'
                       />
                   </View>
 
-                  <View style={{marginTop:5,backgroundColor:"white",flexDirection:"row",width: 300,borderRadius: 6,borderWidth: 2,borderColor: '#ffffff',}}>
+                  <View style={styles.action}>
                       < Icon style={{padding: 10}} name="phone" size={30} color="black" />
                       <TextInput
-                      style={styles.input}
+                      style={styles.inputField}
                       value={number}
-                      onChangeText={SetNumber}
-                      placeholder="Phone number"
+                      onChangeText={setNumber}
+                      placeholder="Contact Number"
                       keyboardType='ascii-capable'
                       autoCompleteType='off'
                       />
                   </View>
 
-                  <View style={{marginTop:5,backgroundColor:"white",flexDirection:"row",width: 300,borderRadius: 6,borderWidth: 2,borderColor: '#ffffff',}}>
+                  <View style={styles.action}>
                       < Icon style={{padding: 10}} name="email" size={30} color="black" />
                       <TextInput
-                      style={styles.input}
+                      style={styles.inputField}
                       value={email}
                       onChangeText={setEmail}
                       placeholder="E-mail"
@@ -118,10 +128,10 @@ function RegistrationScreen(){
                       />
                   </View>
 
-                  <View style={{marginTop:5,backgroundColor:"white",flexDirection:"row",width: 300,borderRadius: 6,borderWidth: 2,borderColor: '#ffffff',}}>
+                  <View style={styles.action}>
                       < Icon style={{padding: 10}} name="lock" size={30} color="black" />
                       <TextInput
-                          style={styles.input}
+                          style={styles.inputField}
                           value={password}
                           onChangeText={setPassword}
                           placeholder="Password"
@@ -129,22 +139,26 @@ function RegistrationScreen(){
                       />
                   </View>
 
-                  <View style={{marginTop:5,backgroundColor:"white",flexDirection:"row",width: 300,borderRadius: 6,borderWidth: 2,borderColor: '#ffffff',}}>
+                  <View style={styles.action}>
                       < Icon style={{padding: 10}} name="lock" size={30} color="black" />
                       <TextInput
-                      style={styles.input}
-                      value={cp}
-                      onChangeText={SetCp}
-                      placeholder="Reenter password "
+                      style={styles.inputField}
+                      value={confirmPassword}
+                      onChangeText={setConfirmPassword}
+                      placeholder="Confirm Password "
                       autoCompleteType='off'
+                      secureTextEntry={true}
                       />
                   </View>
 
-                  <Pressable style={styles.button} onPress={() =>NewUser(email, password)}>
+                 <View style={styles.buttonContainer}>
+                 <Pressable style={styles.button} onPress={() =>NewUser(email, password)}>
                       <Text style={styles.text}>
-                          Create User
+                          Register
                       </Text>
                   </Pressable>
+                 </View>
+
               </View>
           </LinearGradient>
       </View>
@@ -154,20 +168,73 @@ function RegistrationScreen(){
 
 const styles = StyleSheet.create({
     container:{
-      flex:1
+       flex:1,
+       flexDirection:'column',
+      alignItems:"flex-start",
+
     },
+    mainHeading:{
+      // flex:1,
+      // flexDirection:'column',
+      // alignItems:"flex-start",
+      paddingLeft:25,
+      paddingBottom:25,
+      padding:10
+
+
+    },
+    registerText:{
+      fontSize:30,
+      paddingBottom:5,
+      color:"black",
+      fontWeight:"bold"
+
+    },
+    registerCaption:{
+      fontSize:16,
+      color:"black",
+      // fontWeight:"500"
+
+    },
+    action:{
+      flexDirection: 'row',
+       marginTop: 10,
+      paddingLeft: 15,
+      borderBottomWidth: 0.5,
+      borderBottomColor: '#f2f2f2',
+      paddingBottom: 5
+  },
+  inputFieldSection:{
+    //  flex:1,
+    justifyContent:"center",
+    alignItems:"center",
+    width:'100%'
+  },
+  inputField:{
+    flex: 1,
+    marginTop: Platform.OS === 'ios' ? 0 : -12,
+    paddingLeft: 10,
+    color: '#fff',
+    fontSize:18,
+    marginTop:2
+},
     input: {
-        color:"black",
+        color:"#fff",
         fontSize:15,
         fontWeight:"bold"
       },
     linearGradient: {
         flex:1,
-        justifyContent:"flex-start",
-        alignItems:"center",
+        // justifyContent:"flex-start",
+        // alignItems:"center",
+    },
+    buttonContainer:{
+      marginTop:30
+
     },
     button: {
-      marginTop:15,
+      marginTop:30,
+      // paddingTop:25,
       alignItems: 'center',
       justifyContent: 'center',
       paddingVertical: 12,
@@ -187,4 +254,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default RegistrationScreen;
+export default CreateUserScreen;

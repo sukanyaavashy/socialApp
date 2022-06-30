@@ -12,8 +12,8 @@ import SelectAudioOrVideo from './homeStack/HomeScreen';
 import SelectVideoOrYoutube from './homeStack/video/VideoHome';
 import { VideoList } from './homeStack/video/VideoList';
 import PlayVideo from './homeStack/video/PlayVideo';
-import VideoPlayer from './homeStack/video/EmbedVideoCode/VideoPlayer';
-import YouTubeCode from './homeStack/video/EmbedVideoCode/YouTubeCode';
+import VideoPlayer from './homeStack/video/YoutubeVideoCode/VideoPlayer';
+import YouTubeCode from './homeStack/video/YoutubeVideoCode/YouTubeCode';
 
 const Authentication = () => {
 

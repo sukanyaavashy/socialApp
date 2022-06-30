@@ -58,7 +58,7 @@ const PlayMusic = ({navigation,route}) => {
   return (
 
     <View style={styles.container}>
-        <Image source={require('../../assets/music.jpg')} style={styles.logoIcon}/>
+        <Image source={require('../../assets/music.png')} style={styles.logoIcon}/>
         <View style={{marginTop:20, flexDirection:'row'}}>
             {playIcon?
               <Pressable onPress={()=>play()}>
@@ -93,26 +93,6 @@ const PlayMusic = ({navigation,route}) => {
 
 
     </View>
-
-    // <View>
-    //   <Button title="play" onPress={() => { play() }} />
-    //   <Button title="pause" onPress={() => { music.pause() }} />
-
-    //   <Button title="play" onPress={() => { music.play() }} />
-
-    //   <Button title="stop" onPress={() => { music.stop() }} />
-
-    //   <Button title="setVolume high" onPress={() => { setVolume('+') }} />
-
-    //   <Button title="setVolume Low" onPress={() => { setVolume("-") }} />
-
-      // <Button title="setCurrentTime" onPress={() => { music.setCurrentTime(100) }} />
-
-      // <Button title="isPlaying" onPress={() => { console.log(music.isPlaying()) }} />
-
-      // <Text>{second}  / Total Second {duration}</Text>
-    // </View>
-
   )
 }
 export default PlayMusic
@@ -128,24 +108,3 @@ styles = StyleSheet.create({
         height:300
     }
 })
-
-
-
-// <View>
-    //   <Button title="play" onPress={() => { play() }} />
-    //   <Button title="pause" onPress={() => { music.pause() }} />
-
-    //   <Button title="play" onPress={() => { music.play() }} />
-
-    //   <Button title="stop" onPress={() => { music.stop() }} />
-
-    //   <Button title="setVolume high" onPress={() => { setVolume('+') }} />
-
-    //   <Button title="setVolume Low" onPress={() => { setVolume("-") }} />
-
-      // <Button title="setCurrentTime" onPress={() => { music.setCurrentTime(100) }} />
-
-      // <Button title="isPlaying" onPress={() => { console.log(music.isPlaying()) }} />
-
-      // <Text>{second}  / Total Second {duration}</Text>
-    // </View>

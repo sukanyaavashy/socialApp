@@ -31,21 +31,19 @@ const SelectAudioOrVideo = ({navigation}) =>{
                             <Text style={styles.text}>Video</Text>
                         </Pressable>
                     </LinearGradient>
-                    <View style={styles.button}>
+                <View style={styles.button}>
                 <TouchableOpacity
-                    style={styles.signIn}
+                    //style={styles.signIn}
                       onPress={() => signOut()}
-
-
                 >
-                <LinearGradient
-                    colors={['#08d4c4', '#01ab9d']}
-                    style={styles.signIn}
-                 >
-                    <Text style={[styles.textSign, {
-                        color:'#fff'
-                    }]}>Sign Out</Text>
-                </LinearGradient>
+                    <LinearGradient
+                        colors={['#08d4c4', '#01ab9d']}
+                        style={styles.signIn}
+                    >
+                        <Text style={[styles.textSign, {
+                            color:'#fff'
+                        }]}>Sign Out</Text>
+                    </LinearGradient>
                 </TouchableOpacity>
 
 
@@ -77,11 +75,14 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     signIn: {
-        // width: '100%',
-        height: 50,
+
+        width:'40%',
+        height: 60,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10
+        borderRadius: 10,
+        padding:10,
+        paddingHorizontal:30
     },
     textSign: {
         fontSize: 18,

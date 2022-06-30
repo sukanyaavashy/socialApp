@@ -6,18 +6,18 @@ import Sound from 'react-native-sound';
 const DATA = [
   {
     id: "1",
-    title: "first song",
+    title: "First song",
     song:'first_song.mp3'
 
   },
   {
     id: "2",
-    title: "second song",
+    title: "Second song",
     song:'second_song.mp3'
   },
   {
     id: "3",
-    title: "third song",
+    title: "Third song",
     song:'third_song.mp3'
 
   },
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
     justifyContent:"center",
-    backgroundColor: "#E6FFE6"
+    backgroundColor: "#fff"
 
   },
   item: {

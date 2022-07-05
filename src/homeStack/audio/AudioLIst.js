@@ -21,6 +21,24 @@ const DATA = [
     song:'third_song.mp3'
 
   },
+  {
+    id: "4",
+    title: "Fourth song",
+    song:'fourth_song.mp3'
+
+  },
+  {
+    id: "5",
+    title: "Fifth song",
+    song:'fifth_song.mp3'
+
+  },
+  {
+    id: "6",
+    title: "Six song",
+    song:'sixth_song.mp3'
+
+  },
 
 ];
 

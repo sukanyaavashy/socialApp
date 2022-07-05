@@ -114,6 +114,7 @@ const LoginScreen = ({navigation}) => {
               console.log('.....',value);
               AsyncStorage.setItem('token', value);
               // console.log('..........',storeData.userReducer.uid)
+              console.log('..........',result.user)
             }
 
           ).catch(

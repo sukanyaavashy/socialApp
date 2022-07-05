@@ -18,7 +18,8 @@ function CreateUserScreen({navigation}){
 
     const uid = useSelector(state=>state.userReducer);
 
-    const NewUser=async(email, password) =>{
+
+    const NewUser=(email, password) =>{
       if(firstName.length==0){
         Alert.alert('Enter user first Name')
     }else if(lastName.length==0){
@@ -38,10 +39,13 @@ function CreateUserScreen({navigation}){
     }
 
         else {
+          // console.log('inside else condition');
           try{
-            await auth().createUserWithEmailAndPassword(email,password).then(
+             auth().createUserWithEmailAndPassword(email,password).then(
               function(res){
+                // console.log("Before Assigning",res)
                 res.user.updateProfile({displayName:firstName+" "+lastName,phoneNumber:number})
+                console.log('After Assigning',res)
                 console.log(navigation.navigate('LoginScreen'))
               }
             )
